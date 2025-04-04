@@ -1,0 +1,27 @@
+footer {
+    flex-shrink: 0; /* Предотвращает сжатие футера */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 86px;
+    width: 100%;
+    background-color: #cf1313;
+}
+
+.logo {
+    margin-right: auto;
+    width: 100px;
+    height: 40px;
+}
+
+.policy {
+    color: white;
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+}
+
+.devLink {
+    color: white;
+    text-decoration: none;
+}

@@ -1,0 +1,65 @@
+.window-cont {
+	padding: 96px 20px 160px;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.home-title {
+	text-align: center;
+	padding: 0 auto;
+	margin-bottom: 80px;
+}
+
+.window-text {
+	color: #525252;
+}
+
+.title-title {
+	font-size: 30px;
+	margin-bottom: 8px;
+}
+
+.functions {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.windows {
+	box-sizing: border-box;
+	max-width: 477px;
+	width: 100%;
+	padding: 24px;
+	border: 1px solid #f3dcdc;
+	border-radius: 10px;
+	margin: 16px 0;
+}
+
+.icon-bg {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background-color: #e652521e;
+	border-radius: 50%;
+	margin-bottom: 16px;
+}
+
+.icon {
+    margin: 0 6px 5px 0;
+	width: 24px;
+	height: 24px;
+	color: #e65252;
+}
+
+.icon svg {
+	width: 30px;
+	height: 30px;
+}
+
+.window-title {
+	font-size: 18px;
+	margin-bottom: 8px;
+}
