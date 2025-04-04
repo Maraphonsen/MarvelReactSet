@@ -20,16 +20,16 @@ const SeriesDetails = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const seriesData = await getSeriesById(id);
+                const [seriesData, charsData, comicsData] = await Promise.all([
+                    getSeriesById(id),
+                    getSeriesCharacters(id, 10),
+                    getSeriesComics(id, 10)
+                ]);
                 setSeries(seriesData);
-                
-                const charsData = await getSeriesCharacters(id);
                 setCharacters(charsData);
-                
-                const comicsData = await getSeriesComics(id);
                 setComics(comicsData);
             } catch (err) {
-                setError('Failed to load series data');
+                setError('Failed to load series data. Please try again later.');
                 console.error(err);
             } finally {
                 setLoading(false);
@@ -39,9 +39,39 @@ const SeriesDetails = () => {
         fetchData();
     }, [id]);
 
-    if (loading) return <div className="loading"></div>;
-    if (error) return <div className="error">{error}</div>;
-    if (!series) return <div className="error">Series not found</div>;
+    if (loading) {
+        return (
+            <div className="loading-container">
+                <div className="loading"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="error">
+                {error}
+                <div style={{ marginTop: '20px' }}>
+                    <Link to="/series" className="back-button">
+                        ← Back to Series
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    if (!series) {
+        return (
+            <div className="error">
+                Series not found
+                <div style={{ marginTop: '20px' }}>
+                    <Link to="/series" className="back-button">
+                        ← Back to Series
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="details-container">
@@ -53,6 +83,9 @@ const SeriesDetails = () => {
                         src={`${series.thumbnail.path}.${series.thumbnail.extension}`}
                         alt={series.title}
                         className="poster-image"
+                        onError={(e) => {
+                            e.target.src = '/placeholder-series.jpg';
+                        }}
                     />
                 </div>
                 
@@ -64,7 +97,10 @@ const SeriesDetails = () => {
                             <p><strong>Years:</strong> {series.startYear} - {series.endYear}</p>
                         )}
                         {series.rating && (
-                            <p><strong>Rating:</strong> {series.rating}</p>
+                            <p><strong>Rating:</strong> {series.rating.replace('Rating', '').trim()}</p>
+                        )}
+                        {series.type && (
+                            <p><strong>Type:</strong> {series.type}</p>
                         )}
                     </div>
                     
@@ -77,11 +113,21 @@ const SeriesDetails = () => {
                     
                     <div className="related-sections">
                         {characters.length > 0 && (
-                            <RelatedItems items={characters} type="characters" title="Characters" />
+                            <RelatedItems 
+                                items={characters} 
+                                type="characters" 
+                                title="Featured Characters"
+                                maxItems={10}
+                            />
                         )}
                         
                         {comics.length > 0 && (
-                            <RelatedItems items={comics} type="comics" title="Comics in this Series" />
+                            <RelatedItems 
+                                items={comics} 
+                                type="comics" 
+                                title="Comics in This Series"
+                                maxItems={10}
+                            />
                         )}
                     </div>
                 </div>

@@ -15,13 +15,14 @@ const ComicsDetails = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const comicData = await getComicsById(id);
+                const [comicData, charsData] = await Promise.all([
+                    getComicsById(id),
+                    getComicCharacters(id, 10)
+                ]);
                 setComic(comicData);
-                
-                const charsData = await getComicCharacters(id);
                 setCharacters(charsData);
             } catch (err) {
-                setError('Failed to load comic data');
+                setError('Failed to load comic data. Please try again later.');
                 console.error(err);
             } finally {
                 setLoading(false);
@@ -31,9 +32,45 @@ const ComicsDetails = () => {
         fetchData();
     }, [id]);
 
-    if (loading) return <div className="loading"></div>;
-    if (error) return <div className="error">{error}</div>;
-    if (!comic) return <div className="error">Comic not found</div>;
+    if (loading) {
+        return (
+            <div className="loading-container">
+                <div className="loading"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="error">
+                {error}
+                <div style={{ marginTop: '20px' }}>
+                    <Link to="/comics" className="back-button">
+                        ← Back to Comics
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    if (!comic) {
+        return (
+            <div className="error">
+                Comic not found
+                <div style={{ marginTop: '20px' }}>
+                    <Link to="/comics" className="back-button">
+                        ← Back to Comics
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    const formatDate = (dateString) => {
+        if (!dateString) return 'Unknown';
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    };
 
     return (
         <div className="details-container">
@@ -45,11 +82,26 @@ const ComicsDetails = () => {
                         src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
                         alt={comic.title}
                         className="poster-image"
+                        onError={(e) => {
+                            e.target.src = '/placeholder-comic.jpg';
+                        }}
                     />
                 </div>
                 
                 <div className="details-info">
                     <h1>{comic.title}</h1>
+                    
+                    <div className="comic-meta">
+                        {comic.dates?.find(d => d.type === 'onsaleDate')?.date && (
+                            <p><strong>Release Date:</strong> {formatDate(comic.dates.find(d => d.type === 'onsaleDate').date)}</p>
+                        )}
+                        {comic.pageCount > 0 && (
+                            <p><strong>Pages:</strong> {comic.pageCount}</p>
+                        )}
+                        {comic.format && (
+                            <p><strong>Format:</strong> {comic.format}</p>
+                        )}
+                    </div>
                     
                     {comic.description && (
                         <div className="details-description">
@@ -58,7 +110,16 @@ const ComicsDetails = () => {
                         </div>
                     )}
                     
-                    <RelatedItems items={characters} type="characters" />
+                    <div className="related-sections">
+                        {characters.length > 0 && (
+                            <RelatedItems 
+                                items={characters} 
+                                type="characters" 
+                                title="Featured Characters"
+                                maxItems={10}
+                            />
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

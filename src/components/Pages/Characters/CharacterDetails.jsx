@@ -20,16 +20,17 @@ const CharacterDetails = () => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const charData = await getCharacterById(id);
+                const [charData, comicsData, seriesData] = await Promise.all([
+                    getCharacterById(id),
+                    getCharacterComics(id, 10),
+                    getCharacterSeries(id, 10)
+                ]);
+                
                 setCharacter(charData);
-                
-                const comicsData = await getCharacterComics(id);
                 setComics(comicsData);
-                
-                const seriesData = await getCharacterSeries(id);
                 setSeries(seriesData);
             } catch (err) {
-                setError('Failed to load character data');
+                setError('Failed to load character data. Please try again later.');
                 console.error(err);
             } finally {
                 setLoading(false);
@@ -39,9 +40,39 @@ const CharacterDetails = () => {
         fetchData();
     }, [id]);
 
-    if (loading) return <div className="loading"></div>;
-    if (error) return <div className="error">{error}</div>;
-    if (!character) return <div className="error">Character not found</div>;
+    if (loading) {
+        return (
+            <div className="loading-container">
+                <div className="loading"></div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="error">
+                {error}
+                <div style={{ marginTop: '20px' }}>
+                    <Link to="/characters" className="back-button">
+                        ← Back to Characters
+                    </Link>
+                </div>
+            </div>
+        );
+    }
+
+    if (!character) {
+        return (
+            <div className="error">
+                Character not found
+                <div style={{ marginTop: '20px' }}>
+                    <Link to="/characters" className="back-button">
+                        ← Back to Characters
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="details-container">
@@ -53,6 +84,9 @@ const CharacterDetails = () => {
                         src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
                         alt={character.name}
                         className="poster-image"
+                        onError={(e) => {
+                            e.target.src = '/placeholder-character.jpg';
+                        }}
                     />
                 </div>
                 
@@ -68,11 +102,21 @@ const CharacterDetails = () => {
                     
                     <div className="related-sections">
                         {comics.length > 0 && (
-                            <RelatedItems items={comics} type="comics" title="Appears in Comics" />
+                            <RelatedItems 
+                                items={comics} 
+                                type="comics" 
+                                title="Appears in Comics" 
+                                maxItems={10}
+                            />
                         )}
                         
                         {series.length > 0 && (
-                            <RelatedItems items={series} type="series" title="Appears in Series" />
+                            <RelatedItems 
+                                items={series} 
+                                type="series" 
+                                title="Appears in Series"
+                                maxItems={10}
+                            />
                         )}
                     </div>
                 </div>

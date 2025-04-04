@@ -1,28 +1,41 @@
+/* Основной контейнер */
 .details-container {
+    min-height: calc(100vh - 180px); /* Учитываем высоту header и footer */
+    display: flex;
+    flex-direction: column;
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
+    position: relative;
 }
 
+/* Кнопка "Назад" */
 .back-button {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 8px 16px;
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 10px 20px;
     background: #e62429;
     color: white;
     text-decoration: none;
     border-radius: 4px;
-    transition: background 0.3s;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    width: fit-content;
 }
 
 .back-button:hover {
     background: #c11a20;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+/* Основное содержимое */
 .details-content {
     display: flex;
     flex-direction: column;
     gap: 30px;
+    flex: 1; /* Занимает всё доступное пространство */
 }
 
 @media (min-width: 768px) {
@@ -31,75 +44,116 @@
     }
 }
 
+/* Изображение персонажа */
 .details-poster {
     flex: 1;
     min-width: 300px;
+    max-width: 500px;
+    position: relative;
+    align-self: flex-start; /* Предотвращает растягивание */
 }
 
 .poster-image {
     width: 100%;
+    height: auto;
     max-height: 500px;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    transition: transform 0.3s ease;
 }
 
+.poster-image:hover {
+    transform: scale(1.02);
+}
+
+/* Информация о персонаже */
 .details-info {
     flex: 2;
+    display: flex;
+    flex-direction: column;
 }
 
 .details-info h1 {
     color: #333;
-    margin-bottom: 20px;
+    margin: 0 0 20px 0;
+    font-size: 2.5rem;
+    line-height: 1.2;
 }
 
+/* Описание */
 .details-description {
-    margin-top: 20px;
+    margin: 25px 0;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
 }
 
 .details-description h3 {
-    color: #555;
-    margin-bottom: 10px;
+    color: #e62429;
+    margin-bottom: 15px;
+    font-size: 1.3rem;
 }
 
 .details-description p {
-    line-height: 1.6;
-    color: #666;
+    line-height: 1.8;
+    color: #444;
+    margin: 0;
 }
 
-.loading, .error {
-    text-align: center;
-    font-size: 1.2rem;
-    margin: 20px;
+/* Связанные элементы */
+.related-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: auto; /* Прижимает к низу */
+    padding-top: 30px;
+}
+
+/* Состояния загрузки и ошибки */
+.loading-container {
+    min-height: calc(100vh - 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #e62429;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
 }
 
 .error {
     color: #e62429;
-}
-.details-meta {
-    margin: 15px 0;
-    color: #555;
-}
-
-.details-meta p {
-    margin: 5px 0;
-}
-
-.related-sections {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 1.2rem;
+    min-height: calc(100vh - 180px);
     display: flex;
-    flex-direction: column;
-    gap: 30px;
-    margin-top: 30px;
+    align-items: center;
+    justify-content: center;
 }
 
-.series-meta {
-    background: #f5f5f5;
-    padding: 10px;
-    border-radius: 4px;
-    margin: 15px 0;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.series-meta p {
-    margin: 5px 0;
-    color: #555;
+/* Адаптация для мобильных */
+@media (max-width: 767px) {
+    .details-info h1 {
+        font-size: 2rem;
+    }
+    
+    .details-description {
+        padding: 15px;
+    }
+    
+    .poster-image {
+        max-height: 400px;
+    }
 }
