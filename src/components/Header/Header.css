@@ -93,15 +93,7 @@ header {
     line-height: 34px;
 }
 
-.sun {
-    opacity: 1;
-    transition: opacity 0.2s;
-}
 
-.moon {
-    opacity: 0;
-    transition: opacity 0.2s;
-}
 
 input:checked + .slider {
     background-color: #e65252;

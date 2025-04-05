@@ -33,8 +33,6 @@ function Header() {
                         />
                         <span className="slider round"></span>
                         <span className="theme-icons">
-                            <span className="sun">☀️</span>
-                            <span className="moon">🌙</span>
                         </span>
                     </label>
                 </nav>

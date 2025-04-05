@@ -1,5 +1,4 @@
 footer {
-    flex-shrink: 0; /* Предотвращает сжатие футера */
     display: flex;
     justify-content: center;
     align-items: center;

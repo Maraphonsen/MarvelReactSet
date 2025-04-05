@@ -3,7 +3,6 @@ import md5 from 'md5';
 const publicKey = '0a167095bb5456f5b8c9b9873dab411c';
 const privateKey = 'a542ba57265ff638c2d88d44fcbb938f4238d47d';
 const baseUrl = 'https://gateway.marvel.com/v1/public';
-
 const createHash = (ts) => {
     return md5(ts + privateKey + publicKey);
 };
@@ -95,7 +94,6 @@ export const getComics = async (limit = 20, offset = 0) => {
         return { comics: [], total: 0 };
     }
 };
-
 export const getComicsById = async (comicsId) => {
     const ts = Date.now().toString();
     const hash = createHash(ts);
