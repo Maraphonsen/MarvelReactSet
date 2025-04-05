@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { getCharacters, searchCharacters } from '../../../API/MarvelApi.jsx';
 import '../styles/page.css';
 import SearchBar from '../../Search/SearchBar.jsx';
 import { Link } from 'react-router-dom';
 import Pagination from '../../Pagination/Pagination.jsx';
+import { FavoritesContext } from '../../context/FavoritesContext.jsx';
 
 function Characters() {
     const [allCharacters, setAllCharacters] = useState([]);
@@ -15,6 +16,8 @@ function Characters() {
     const [totalPages, setTotalPages] = useState(0);
     const [isSearching, setIsSearching] = useState(false);
     const itemsPerPage = 20;
+
+    const { toggleFavorite, isFavorite } = useContext(FavoritesContext);
 
     useEffect(() => {
         const fetchCharacters = async () => {
@@ -94,9 +97,18 @@ function Characters() {
                                 className="character-image"
                             />
                             <h2 className="character-title">{character.name}</h2>
-                            <Link to={`/characters/${character.id}`} className="see-more-btn">
-                                See More
-                            </Link>
+                            <div className="card-actions">
+                                <Link to={`/characters/${character.id}`} className="see-more-btn">
+                                    See More
+                                </Link>
+                                <button 
+                                    className={`favorite-btn ${isFavorite('characters', character.id) ? 'active' : ''}`}
+                                    onClick={() => toggleFavorite('characters', character)}
+                                    aria-label={isFavorite('characters', character.id) ? "Remove from favorites" : "Add to favorites"}
+                                >
+                                    ♥
+                                </button>
+                            </div>
                         </div>
                     ))
                 ) : (

@@ -1,3 +1,4 @@
+// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './styles/App.css';
@@ -10,10 +11,12 @@ import Comics from './components/Pages/Comics/Comics';
 import CharacterDetails from './components/Pages/Characters/CharacterDetails';
 import SeriesDetails from './components/Pages/Series/SeriesDetails';
 import ComicsDetails from './components/Pages/Comics/ComicsDetails';
-import Pagination from './components/Pagination/Pagination';
+import Favorites from './components/Pages/Favorites/Favorites';
+import { FavoritesProvider } from './components/context/FavoritesContext';
 
 function App() {
     return (
+        <FavoritesProvider>
             <Router>
                 <Header />
                 <Routes>
@@ -24,10 +27,11 @@ function App() {
                     <Route path="/characters/:id" element={<CharacterDetails />} />
                     <Route path="/series/:id" element={<SeriesDetails />} />
                     <Route path="/comics/:id" element={<ComicsDetails />} />
+                    <Route path="/favourites" element={<Favorites />} />
                 </Routes>
-                <Pagination />
                 <Footer />
             </Router>
+        </FavoritesProvider>
     );
 }
 

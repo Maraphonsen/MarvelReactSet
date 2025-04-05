@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { getComics, searchComics } from '../../../API/MarvelApi.jsx';
 import '../styles/page.css';
 import SearchBar from '../../Search/SearchBar.jsx';
 import { Link } from 'react-router-dom';
 import Pagination from '../../Pagination/Pagination.jsx';
+import { FavoritesContext } from '../../context/FavoritesContext.jsx';
 
 function Comics() {
     const [allComics, setAllComics] = useState([]);
@@ -15,6 +16,8 @@ function Comics() {
     const [totalPages, setTotalPages] = useState(0);
     const [isSearching, setIsSearching] = useState(false);
     const itemsPerPage = 20;
+
+    const { toggleFavorite, isFavorite } = useContext(FavoritesContext);
 
     useEffect(() => {
         const fetchComics = async () => {
@@ -86,17 +89,26 @@ function Comics() {
             
             <div className="comics-list">
                 {displayComics.length > 0 ? (
-                    displayComics.map((item) => (
-                        <div key={item.id} className="comics-card">
+                    displayComics.map((comic) => (
+                        <div key={comic.id} className="comics-card">
                             <img
-                                src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
-                                alt={item.title}
+                                src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
+                                alt={comic.title}
                                 className="comics-image"
                             />
-                            <h2 className="comics-title">{item.title}</h2>
-                            <Link to={`/comics/${item.id}`} className="see-more-btn">
-                                See More
-                            </Link>
+                            <h2 className="comics-title">{comic.title}</h2>
+                            <div className="card-actions">
+                                <Link to={`/comics/${comic.id}`} className="see-more-btn">
+                                    See More
+                                </Link>
+                                <button 
+                                    className={`favorite-btn ${isFavorite('comics', comic.id) ? 'active' : ''}`}
+                                    onClick={() => toggleFavorite('comics', comic)}
+                                    aria-label={isFavorite('comics', comic.id) ? "Remove from favorites" : "Add to favorites"}
+                                >
+                                    ♥
+                                </button>
+                            </div>
                         </div>
                     ))
                 ) : (

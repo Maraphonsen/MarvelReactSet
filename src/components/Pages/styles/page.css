@@ -162,3 +162,40 @@
     color: #666;
     padding: 20px;
 }
+.favorite-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #ccc;
+    transition: color 0.3s;
+    padding: 5px;
+}
+
+.favorite-btn:hover {
+    color: #e62429;
+}
+
+.favorite-btn.active {
+    color: #e62429;
+}
+
+.favorites-container {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.favorites-sections {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+.favorites-section h2 {
+    margin-bottom: 20px;
+    color: #e62429;
+    border-bottom: 2px solid #e62429;
+    padding-bottom: 10px;
+}
