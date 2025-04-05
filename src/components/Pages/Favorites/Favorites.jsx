@@ -9,10 +9,9 @@ function Favorites() {
 
     return (
         <div className="favorites-container">
-            <h1>Your Favorites</h1>
-            
             <div className="favorites-sections">
                 <div className="favorites-section">
+                    <h2>Characters</h2>
                     <div className="characters-list">
                         {favorites.characters.length > 0 ? (
                             favorites.characters.map(character => (
